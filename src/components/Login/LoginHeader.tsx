@@ -1,15 +1,14 @@
 import React from 'react';
+import { Eye } from 'lucide-react';
 
 export const LoginHeader: React.FC = () => {
   return (
     <div className="text-center mb-8">
-      <div className="mx-auto w-16 h-16 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center mb-6 shadow-lg animate-float">
-        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
+      <div className="mx-auto w-20 h-20 bg-gradient-to-br from-slate-900 to-slate-700 rounded-2xl flex items-center justify-center mb-6 shadow-2xl">
+        <Eye className="w-10 h-10 text-white" />
       </div>
-      <h1 className="text-3xl font-bold text-white mb-2 tracking-wide">Vision</h1>
-      <p className="text-white/70 text-sm">Entre na sua conta para continuar</p>
+      <h1 className="text-3xl font-bold text-gray-900 mb-2">Vision</h1>
+      <p className="text-gray-500 font-medium">Entre na sua conta para continuar</p>
     </div>
   );
 };

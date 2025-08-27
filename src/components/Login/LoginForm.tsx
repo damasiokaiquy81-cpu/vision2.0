@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, Loader2 } from 'lucide-react';
 
 interface LoginFormProps {
   email: string;
@@ -24,17 +24,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     <form onSubmit={onSubmit} className="space-y-6">
       <div className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-white/90 mb-2">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
             Email
           </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50" />
+            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+              className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="Digite seu email"
               required
             />
@@ -42,17 +42,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-white/90 mb-2">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
             Senha
           </label>
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50" />
+            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all"
+              className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="Digite sua senha"
               required
             />
@@ -61,7 +61,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       </div>
 
       {error && (
-        <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-red-200 text-sm text-center animate-slide-in">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-700 text-sm text-center">
           {error}
         </div>
       )}
@@ -69,11 +69,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-cyan-500/25"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
           <>
-            <div className="spinner"></div>
+            <Loader2 className="w-4 h-4 animate-spin" />
             Entrando...
           </>
         ) : (

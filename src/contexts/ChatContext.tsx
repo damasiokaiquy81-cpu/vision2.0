@@ -1,15 +1,15 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Message, FilterOptions, InsightsState } from '../types';
+import { Message } from '../types';
 
 interface ChatContextType {
   messages: Message[];
-  currentFilter: FilterOptions;
-  insights: InsightsState;
+  reportContent: string;
+  isTypingReport: boolean;
   addMessage: (text: string, sender: 'user' | 'bot' | 'info', id?: string) => void;
   clearMessages: () => void;
   removeMessage: (id: string) => void;
-  updateFilter: (filter: FilterOptions) => void;
-  updateInsights: (period: 'dia' | 'mes', data: Partial<InsightsState['dia']>) => void;
+  setReportContent: (content: string, animated?: boolean) => void;
+  clearReport: () => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -28,19 +28,8 @@ interface ChatProviderProps {
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [currentFilter, setCurrentFilter] = useState<FilterOptions>({ type: 'geral' });
-  const [insights, setInsights] = useState<InsightsState>({
-    dia: {
-      vendas: Math.floor(Math.random() * 15) + 3,
-      topVendedor: 'João Silva',
-      topVendedorVendas: Math.floor(Math.random() * 8) + 1
-    },
-    mes: {
-      vendas: Math.floor(Math.random() * 200) + 50,
-      topVendedor: 'Maria Santos',
-      topVendedorVendas: Math.floor(Math.random() * 50) + 10
-    }
-  });
+  const [reportContent, setReportContentState] = useState<string>('');
+  const [isTypingReport, setIsTypingReport] = useState(false);
 
   const addMessage = (text: string, sender: 'user' | 'bot' | 'info', id?: string) => {
     const message: Message = {
@@ -60,28 +49,48 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     setMessages(prev => prev.filter(msg => msg.id !== id));
   };
 
-  const updateFilter = (filter: FilterOptions) => {
-    setCurrentFilter(filter);
+  const setReportContent = (content: string, animated: boolean = false) => {
+    if (!animated) {
+      setReportContentState(content);
+      return;
+    }
+
+    setIsTypingReport(true);
+    setReportContentState('');
+    
+    let currentIndex = 0;
+    const words = content.split(' ');
+    
+    const typeWord = () => {
+      if (currentIndex < words.length) {
+        setReportContentState(prev => 
+          prev + (currentIndex === 0 ? '' : ' ') + words[currentIndex]
+        );
+        currentIndex++;
+        setTimeout(typeWord, 100); // 100ms entre palavras
+      } else {
+        setIsTypingReport(false);
+      }
+    };
+    
+    typeWord();
   };
 
-
-  const updateInsights = (period: 'dia' | 'mes', data: Partial<InsightsState['dia']>) => {
-    setInsights(prev => ({
-      ...prev,
-      [period]: { ...prev[period], ...data }
-    }));
+  const clearReport = () => {
+    setReportContentState('');
+    setIsTypingReport(false);
   };
 
   return (
     <ChatContext.Provider value={{
       messages,
-      currentFilter,
-      insights,
+      reportContent,
+      isTypingReport,
       addMessage,
       clearMessages,
       removeMessage,
-      updateFilter,
-      updateInsights
+      setReportContent,
+      clearReport
     }}>
       {children}
     </ChatContext.Provider>
