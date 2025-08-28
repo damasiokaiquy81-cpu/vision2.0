@@ -105,6 +105,7 @@ export const FilterArea: React.FC<FilterAreaProps> = ({
 }) => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const [expandedSubcategories, setExpandedSubcategories] = useState<string[]>([]);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   
   const { user, getWebhook } = useAuth();
   const { addMessage, removeMessage } = useChat();
@@ -130,16 +131,47 @@ export const FilterArea: React.FC<FilterAreaProps> = ({
   };
 
   return (
-    <div className="w-64 bg-white border-l border-gray-200 flex flex-col shadow-sm">
-      <div className="px-3 py-2 border-b border-gray-200 flex items-center justify-between bg-white">
-         <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-black" />
-            <div>
-              <h2 className="text-sm font-semibold text-black">Filtros</h2>
-              <p className="text-xs text-gray-500 -mt-0.5">Análises pré-configuradas</p>
+    <>
+      {/* Mobile toggle button */}
+      <div className="md:hidden fixed top-20 right-4 z-50">
+        <button
+          onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
+          className="bg-teal-500 hover:bg-teal-600 text-white p-2 rounded-full shadow-lg transition-all duration-300"
+        >
+          <ChevronRight className={`w-5 h-5 transition-transform duration-300 ${
+            isSidebarExpanded ? 'rotate-180' : ''
+          }`} />
+        </button>
+      </div>
+
+      {/* Overlay for mobile */}
+       {isSidebarExpanded && (
+         <div 
+           className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+           onClick={() => setIsSidebarExpanded(false)}
+         />
+       )}
+
+       {/* Sidebar */}
+       <div className={`${
+         isSidebarExpanded ? 'translate-x-0' : 'translate-x-full'
+       } md:translate-x-0 fixed md:relative top-0 right-0 h-full w-64 bg-white border-l border-gray-200 flex flex-col shadow-sm transition-transform duration-300 ease-in-out z-40 md:z-auto`}>
+        <div className="px-3 py-2 border-b border-gray-200 flex items-center justify-between bg-white">
+           <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-black" />
+              <div>
+                <h2 className="text-sm font-semibold text-black">Filtros</h2>
+                <p className="text-xs text-gray-500 -mt-0.5">Análises pré-configuradas</p>
+              </div>
             </div>
-          </div>
-       </div>
+            {/* Close button for mobile */}
+            <button
+              onClick={() => setIsSidebarExpanded(false)}
+              className="md:hidden text-gray-500 hover:text-gray-700"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+         </div>
 
       <div className="flex-1 overflow-y-auto p-2 space-y-2">
         {FILTER_CATEGORIES.map(category => (
@@ -186,5 +218,6 @@ export const FilterArea: React.FC<FilterAreaProps> = ({
 
 
     </div>
+    </>
   );
 };

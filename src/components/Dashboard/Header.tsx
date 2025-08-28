@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Eye, LogOut, User } from 'lucide-react';
+import { Eye, LogOut } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -19,13 +19,6 @@ export const Header: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-2 py-1 border border-gray-300 rounded-lg bg-gray-100">
-              <div className="w-5 h-5 bg-gray-700 rounded-sm flex items-center justify-center">
-                <User className="w-2.5 h-2.5 text-white" />
-              </div>
-              <span className="text-xs text-gray-700">{user?.name || user?.email || 'developer@gmail.com'}</span>
-            </div>
-        
         <button
            onClick={logout}
            className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-red-500 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 rounded-lg transition-all duration-300 group hover:shadow-lg hover:shadow-red-100/30"
