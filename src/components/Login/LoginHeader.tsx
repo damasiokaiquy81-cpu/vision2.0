@@ -3,12 +3,12 @@ import { Eye } from 'lucide-react';
 
 export const LoginHeader: React.FC = () => {
   return (
-    <div className="text-center mb-8">
-      <div className="mx-auto w-20 h-20 bg-gradient-to-br from-slate-900 to-slate-700 rounded-2xl flex items-center justify-center mb-6 shadow-2xl">
+    <div className="text-center mb-5">
+      <div className="mx-auto w-16 h-16 bg-gradient-to-br from-teal-400 to-teal-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
         <Eye className="w-10 h-10 text-white" />
       </div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Vision</h1>
-      <p className="text-gray-500 font-medium">Entre na sua conta para continuar</p>
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">Vision</h1>
+      <p className="text-gray-600 text-center leading-relaxed">Entre na sua conta para continuar</p>
     </div>
   );
 };

@@ -6,37 +6,33 @@ export const Header: React.FC = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm border-b border-gray-100/50 px-6 py-4">
+    <header className="bg-white border-b border-gray-200 px-6 py-2 shadow-sm">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-slate-900 to-slate-700 rounded-xl flex items-center justify-center shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-xl flex items-center justify-center">
             <Eye className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Vision</h1>
-            <p className="text-sm text-gray-500">Chat Web com Insights</p>
+            <h1 className="text-lg font-bold text-gray-800">Vision</h1>
+            <p className="text-xs text-gray-500">Dashboard de Análises</p>
           </div>
         </div>
-
+        
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl border border-slate-200/50">
-            <div className="w-8 h-8 bg-gradient-to-br from-slate-700 to-slate-900 rounded-lg flex items-center justify-center shadow-sm">
-              <User className="w-4 h-4 text-white" />
+          <div className="flex items-center gap-2 px-2 py-1 border border-gray-300 rounded-lg bg-gray-100">
+              <div className="w-5 h-5 bg-gray-700 rounded-sm flex items-center justify-center">
+                <User className="w-2.5 h-2.5 text-white" />
+              </div>
+              <span className="text-xs text-gray-700">{user?.name || user?.email || 'developer@gmail.com'}</span>
             </div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">{user?.email}</p>
-              <p className="text-xs text-gray-500">Conectado</p>
-            </div>
-          </div>
-
-          <button
-            onClick={logout}
-            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 rounded-xl transition-all duration-200"
-            title="Sair"
-          >
-            <LogOut className="w-4 h-4" />
-            <span className="text-sm font-medium">Sair</span>
-          </button>
+        
+        <button
+           onClick={logout}
+           className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-red-500 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 rounded-lg transition-all duration-300 group hover:shadow-lg hover:shadow-red-100/30"
+         >
+           <LogOut className="w-4 h-4 group-hover:scale-110 transition-all duration-300" />
+           <span className="text-sm font-medium">Sair</span>
+         </button>
         </div>
       </div>
     </header>

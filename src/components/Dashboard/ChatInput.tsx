@@ -9,7 +9,7 @@ export const ChatInput: React.FC = () => {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { user, getWebhook } = useAuth();
-  const { addMessage, removeMessage, setReportContent } = useChat();
+  const { addMessage, removeMessage } = useChat();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,20 +42,9 @@ export const ChatInput: React.FC = () => {
       
       removeMessage(typingId);
       
-      // Verificar se a resposta tem o campo caminho
-      if (response.caminho === 1) {
-        // Resposta vai para o chat
-        const resposta = response.resposta || 'Processando sua solicitação.';
-        addMessage(resposta, 'bot');
-      } else if (response.caminho === 2) {
-        // Resposta vai para relatórios com animação
-        const resposta = response.resposta || 'Gerando relatório...';
-        setReportContent(resposta, true);
-      } else {
-        // Fallback para compatibilidade
-        const resposta = response.resposta || response.message || 'Processando sua solicitação.';
-        addMessage(resposta, 'bot');
-      }
+      // Todas as respostas agora vão para o chat
+      const resposta = response.resposta || response.message || 'Processando sua solicitação.';
+      addMessage(resposta, 'bot');
     } catch (error) {
       removeMessage(typingId);
       addMessage('Desculpe, ocorreu um erro ao processar sua solicitação. Tente novamente.', 'bot');
@@ -65,14 +54,14 @@ export const ChatInput: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3">
+    <form onSubmit={handleSubmit} className="flex gap-2">
       <div className="flex-1 relative">
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Digite sua mensagem..."
-          className="w-full px-4 py-3 border border-gray-200/60 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-slate-400/50 focus:border-slate-300 transition-all text-sm bg-white/80 backdrop-blur-sm shadow-sm placeholder-gray-400"
-          rows={3}
+          className="w-full px-3 py-2 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-300 text-sm bg-white shadow-lg placeholder-gray-400"
+          rows={2}
           disabled={isLoading}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -83,16 +72,16 @@ export const ChatInput: React.FC = () => {
         />
         {isLoading && (
           <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-            <Loader2 className="w-5 h-5 animate-spin text-slate-500" />
+            <Loader2 className="w-4 h-4 animate-spin text-slate-500" />
           </div>
         )}
       </div>
       <button
         type="submit"
         disabled={isLoading || !message.trim()}
-        className="px-3 py-2 bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 text-white rounded-lg transition-all duration-200 flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+        className="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-2xl transition-all duration-300 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium shadow-xl hover:shadow-2xl transform hover:scale-[1.02] active:scale-[0.98]"
       >
-        <Send className="w-3.5 h-3.5" />
+        <Send className="w-4 h-4" />
       </button>
     </form>
   );
