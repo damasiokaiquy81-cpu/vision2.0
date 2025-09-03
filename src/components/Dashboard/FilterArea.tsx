@@ -42,17 +42,17 @@ const FILTER_CATEGORIES: FilterCategory[] = [
           {
             id: 'vendedor_geral_semanal',
             label: 'Semanal',
-            message: 'Gerar análise semanal geral de todos os vendedores'
+            message: 'Gerar análise weekly geral de todos os vendedores'
           },
           {
             id: 'vendedor_geral_mensal',
             label: 'Mensal',
-            message: 'Gerar análise mensal geral de todos os vendedores'
+            message: 'Gerar análise month geral de todos os vendedores'
           },
           {
             id: 'vendedor_geral_anual',
             label: 'Anual',
-            message: 'Gerar análise anual geral de todos os vendedores'
+            message: 'Gerar análise year geral de todos os vendedores'
           }
         ]
       }
@@ -70,17 +70,17 @@ const FILTER_CATEGORIES: FilterCategory[] = [
           {
             id: 'cliente_geral_semanal',
             label: 'Semanal',
-            message: 'Gerar análise semanal geral de todos os clientes'
+            message: 'Gerar análise weekly geral de todos os clientes'
           },
           {
             id: 'cliente_geral_mensal',
             label: 'Mensal',
-            message: 'Gerar análise mensal geral de todos os clientes'
+            message: 'Gerar análise month geral de todos os clientes'
           },
           {
             id: 'cliente_geral_anual',
             label: 'Anual',
-            message: 'Gerar análise anual geral de todos os clientes'
+            message: 'Gerar análise year geral de todos os clientes'
           }
         ]
       }

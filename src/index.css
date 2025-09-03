@@ -3,6 +3,70 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom scrollbar styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+.scrollbar-track-gray-100::-webkit-scrollbar-track {
+  background-color: #f3f4f6;
+  border-radius: 4px;
+}
+
+.hover\:scrollbar-thumb-gray-400:hover::-webkit-scrollbar-thumb {
+  background-color: #9ca3af;
+}
+
+/* Ensure table scrolling works properly */
+.table-scroll-container {
+  cursor: grab;
+}
+
+.table-scroll-container:active {
+  cursor: grabbing;
+}
+
+
+
+/* Force horizontal scrollbar to always be visible */
+.overflow-x-auto {
+  overflow-x: scroll !important;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+  height: 14px !important;
+  background-color: #f1f5f9 !important;
+  border-radius: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1 !important;
+  border-radius: 8px !important;
+  min-width: 50px !important;
+  border: 2px solid #f1f5f9;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8 !important;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background-color: #f8fafc !important;
+  border-radius: 8px !important;
+}
+
 * {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   margin: 0;
@@ -47,6 +111,42 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+/* Resizable table columns */
+.resizable-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.resizable-table th,
+.resizable-table td {
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resizable-table th {
+  resize: horizontal;
+  overflow: auto;
+  border-right: 2px solid #e5e7eb;
+}
+
+.resizable-table th:hover {
+  border-right-color: #3b82f6;
+}
+
+/* Grid resizable columns */
+.grid-resizable > div {
+  resize: horizontal;
+  overflow: auto;
+  min-width: 80px;
+  border-right: 1px solid #e5e7eb;
+}
+
+.grid-resizable > div:hover {
+  border-right-color: #3b82f6;
 }
 
 /* Focus styles */

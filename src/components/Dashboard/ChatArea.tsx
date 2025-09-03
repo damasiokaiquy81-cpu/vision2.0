@@ -45,8 +45,8 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-b from-white/95 via-gray-50/20 to-white/90 border-r border-gray-200/40">
-      <div className="px-5 py-3 border-b border-gray-200/40 bg-gradient-to-r from-white/90 to-gray-50/80 backdrop-blur-md shadow-sm shadow-gray-100/30">
+    <div className="h-full flex flex-col bg-gradient-to-b from-white/95 via-gray-50/20 to-white/90 border-r border-gray-200/40">
+      <div className="px-5 py-3 border-b border-gray-200/40 bg-gradient-to-r from-white/90 to-gray-50/80 backdrop-blur-md shadow-sm shadow-gray-100/30 flex-shrink-0">
         <div className="flex items-center justify-between">
            <div>
              <h2 className="text-base font-semibold text-gray-800">Conversa</h2>
@@ -63,17 +63,21 @@ export const ChatArea: React.FC<ChatAreaProps> = ({
       </div>
       
       <div className="flex-1 flex flex-col overflow-hidden">
-        <FilterSubChat
-          selectedFilter={selectedFilter}
-          formData={formData}
-          isLoading={isFilterLoading}
-          onFormChange={onFilterFormChange}
-          onSendMessage={onFilterSendMessage}
-          onCancel={onFilterCancel}
-          canSendMessage={canSendFilterMessage}
-        />
-        <ChatMessages />
-        <div className="border-t border-gray-200 p-4 bg-white shadow-inner">
+        <div className="flex-shrink-0">
+          <FilterSubChat
+            selectedFilter={selectedFilter}
+            formData={formData}
+            isLoading={isFilterLoading}
+            onFormChange={onFilterFormChange}
+            onSendMessage={onFilterSendMessage}
+            onCancel={onFilterCancel}
+            canSendMessage={canSendFilterMessage}
+          />
+        </div>
+        <div className="flex-1 min-h-0">
+          <ChatMessages />
+        </div>
+        <div className="border-t border-gray-200 p-4 bg-white shadow-inner flex-shrink-0">
           <ChatInput />
         </div>
       </div>

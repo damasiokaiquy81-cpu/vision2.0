@@ -99,6 +99,16 @@ export const FilterSubChat: React.FC<FilterSubChatProps> = ({
   
   // Determinar o tipo de análise (cliente ou vendedor)
   const analysisType = selectedFilter.id.includes('vendedor') ? 'Vendedor' : 'Cliente';
+  
+  // Determinar o período correto em português
+  const getPeriodText = (label: string) => {
+    switch(label) {
+      case 'Semanal': return 'Semanal';
+      case 'Mensal': return 'Mensal';
+      case 'Anual': return 'Anual';
+      default: return label;
+    }
+  };
 
   return (
     <div className="bg-white border-b border-gray-200 p-2 shadow-sm">
@@ -106,7 +116,7 @@ export const FilterSubChat: React.FC<FilterSubChatProps> = ({
         <div className="flex items-center gap-2">
           <Filter className="w-3 h-3 text-teal-600" />
           <div>
-            <h3 className="text-sm font-medium text-gray-700">{analysisType} - {selectedFilter.label}</h3>
+            <h3 className="text-sm font-medium text-gray-700">Análise Geral {selectedFilter.label} - {analysisType}</h3>
           </div>
         </div>
         <div className="flex items-center gap-2">
