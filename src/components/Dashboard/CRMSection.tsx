@@ -240,12 +240,12 @@ const CRMSection: React.FC = () => {
   return (
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
-      <div className="p-6 border-b border-gray-200 bg-white">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">CRM Vision</h1>
+      <div className="p-3 md:p-6 border-b border-gray-200 bg-white">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4">CRM Vision</h1>
         
         {/* View Selector and Refresh Button */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4">
+          <div className="flex flex-wrap gap-1 md:gap-2 w-full sm:w-auto">
             {viewOptions.map((option) => {
               const Icon = option.icon;
               const isActive = currentView === option.id;
@@ -255,14 +255,15 @@ const CRMSection: React.FC = () => {
                   key={option.id}
                   onClick={() => handleViewChange(option.id)}
                   disabled={loading}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                  className={`flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm ${
                     isActive
                       ? 'bg-teal-100 text-teal-800 border border-teal-200'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span className="font-medium text-gray-900">{option.name}</span>
+                  <Icon className="w-3 h-3 md:w-4 md:h-4" />
+                  <span className="font-medium text-gray-900 hidden sm:inline">{option.name}</span>
+                  <span className="font-medium text-gray-900 sm:hidden">{option.name.split(' ')[0]}</span>
                 </button>
               );
             })}
@@ -272,10 +273,10 @@ const CRMSection: React.FC = () => {
           <button
             onClick={() => handleViewChange(currentView)}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1.5 md:py-2 rounded-lg bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm w-full sm:w-auto justify-center"
             title="Atualizar dados"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-3 h-3 md:w-4 md:h-4 ${loading ? 'animate-spin' : ''}`} />
             <span className="font-medium">Atualizar</span>
           </button>
         </div>
@@ -290,17 +291,17 @@ const CRMSection: React.FC = () => {
         )}
         
         {/* Search Filter */}
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 mb-4">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Search className="w-5 h-5 text-gray-400" />
-              <span className="text-sm font-medium text-gray-700">Buscar por:</span>
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-2 md:p-4 mb-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 md:gap-4">
+            <div className="flex items-center gap-2 min-w-0">
+              <Search className="w-3 h-3 md:w-5 md:h-5 text-gray-400 flex-shrink-0" />
+              <span className="text-xs md:text-sm font-medium text-gray-700 hidden sm:inline">Buscar por:</span>
             </div>
             
             <select
               value={searchColumn}
               onChange={(e) => setSearchColumn(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 bg-white"
+              className="border border-gray-300 rounded-lg px-2 md:px-3 py-1.5 md:py-2 text-xs md:text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 bg-white min-w-0 flex-1 sm:flex-initial"
             >
               {searchColumns.map(column => (
                 <option key={column.value} value={column.value} className="text-gray-900">
@@ -314,19 +315,19 @@ const CRMSection: React.FC = () => {
               placeholder={`Digite para buscar em ${searchColumns.find(col => col.value === searchColumn)?.label}...`}
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 bg-white placeholder-gray-500"
+              className="flex-1 border border-gray-300 rounded-lg px-2 md:px-3 py-1.5 md:py-2 text-xs md:text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-gray-900 bg-white placeholder-gray-500 min-w-0"
             />
             
             {searchValue && (
               <button
                 onClick={() => setSearchValue('')}
-                className="text-gray-400 hover:text-gray-600 p-1"
+                className="text-gray-400 hover:text-gray-600 p-1 flex-shrink-0 self-center"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3 h-3 md:w-4 md:h-4" />
               </button>
             )}
             
-            <div className="text-sm text-gray-500 font-medium">
+            <div className="text-xs md:text-sm text-gray-500 font-medium text-center sm:text-left">
               {filteredLeads.length} de {leads.length} registros
             </div>
           </div>
@@ -338,17 +339,17 @@ const CRMSection: React.FC = () => {
             <table className="min-w-full w-full table-auto">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Data Análise</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">ID</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Nome</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Telefone</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Resumo</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Satisfação</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Reclamação</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Duração</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Tema</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Busca</th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Keywords</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Data</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">ID</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Nome</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200 hidden sm:table-cell">Telefone</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200">Resumo</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200 hidden md:table-cell">Satisfação</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200 hidden md:table-cell">Reclamação</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200 hidden lg:table-cell">Duração</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200 hidden lg:table-cell">Tema</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider border-r border-gray-200 hidden lg:table-cell">Busca</th>
+                  <th className="px-1 md:px-2 py-1.5 md:py-2 text-left text-xs font-medium text-gray-900 uppercase tracking-wider hidden lg:table-cell">Keywords</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -372,57 +373,57 @@ const CRMSection: React.FC = () => {
                     <tr key={lead.id} className={`transition-colors cursor-pointer hover:bg-blue-50 ${
                       index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
                     }`}>
-                      <td className="px-2 py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[80px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[60px] md:max-w-[80px]" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('dtAnalysis'); }}
                           title={lead.dtAnalysis}>
                         <div className="truncate">{lead.dtAnalysis ? new Date(lead.dtAnalysis).toLocaleDateString('pt-BR') : 'N/A'}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs font-mono text-gray-900 border-r border-gray-100 font-bold max-w-[60px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs font-mono text-gray-900 border-r border-gray-100 font-bold max-w-[40px] md:max-w-[60px]" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('id'); }}
                           title={`#${lead.id.toString().padStart(3, '0')}`}>
                         <div className="truncate">#{lead.id.toString().padStart(3, '0')}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs font-medium text-gray-900 border-r border-gray-100 max-w-[100px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs font-medium text-gray-900 border-r border-gray-100 max-w-[80px] md:max-w-[100px]" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('name'); }}
                           title={lead.name}>
                         <div className="truncate font-semibold">{lead.name}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[100px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[80px] md:max-w-[100px] hidden sm:table-cell" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('phone'); }}
                           title={lead.phone}>
                         <div className="truncate">{lead.phone}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs text-gray-900 border-r border-gray-100 max-w-[150px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 border-r border-gray-100 max-w-[100px] md:max-w-[150px]" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('resumo'); }}
                           title={lead.resumo}>
                         <div className="truncate font-medium">{lead.resumo}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[80px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[60px] md:max-w-[80px] hidden md:table-cell" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('satisfacao'); }}
                           title={lead.satisfacao}>
                         <div className="truncate">{lead.satisfacao}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[100px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[80px] md:max-w-[100px] hidden md:table-cell" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('reclamacao'); }}
                           title={lead.reclamacao}>
                         <div className="truncate">{lead.reclamacao}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[60px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[50px] md:max-w-[60px] hidden lg:table-cell" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('duracao'); }}
                           title={lead.duracao}>
                         <div className="truncate">{lead.duracao}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[80px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[60px] md:max-w-[80px] hidden lg:table-cell" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('tema'); }}
                           title={lead.tema}>
                         <div className="truncate">{lead.tema}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[80px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 border-r border-gray-100 font-medium max-w-[60px] md:max-w-[80px] hidden lg:table-cell" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('busca'); }}
                           title={lead.busca}>
                         <div className="truncate">{lead.busca}</div>
                       </td>
-                      <td className="px-2 py-2 text-xs text-gray-900 font-medium max-w-[100px]" 
+                      <td className="px-1 md:px-2 py-1.5 md:py-2 text-xs text-gray-900 font-medium max-w-[80px] md:max-w-[100px] hidden lg:table-cell" 
                           onClick={() => { setSelectedLead(lead); setHighlightedField('keywords'); }}
                           title={lead.keywords}>
                         <div className="truncate">{lead.keywords}</div>
@@ -438,45 +439,45 @@ const CRMSection: React.FC = () => {
 
       {/* Modal de Expansão */}
       {selectedLead && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setSelectedLead(null)}>
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Detalhes do Lead #{selectedLead.id.toString().padStart(3, '0')}</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 md:p-4" onClick={() => setSelectedLead(null)}>
+          <div className="bg-white rounded-lg p-3 md:p-6 max-w-2xl w-full max-h-[90vh] md:max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-3 md:mb-4">
+              <h3 className="text-base md:text-lg font-semibold text-gray-900">Detalhes do Lead #{selectedLead.id.toString().padStart(3, '0')}</h3>
               <button
                 onClick={() => setSelectedLead(null)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 p-1"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5 md:w-6 md:h-6" />
               </button>
             </div>
             
-            <div className="space-y-4">
-              <div className={`p-3 rounded-lg border-2 ${
+            <div className="space-y-2 md:space-y-4">
+              <div className={`p-2 md:p-3 rounded-lg border-2 ${
                 highlightedField === 'id' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'
               }`}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">ID</label>
-                <p className="text-gray-900 font-semibold">#{selectedLead.id.toString().padStart(3, '0')}</p>
+                <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1">ID</label>
+                <p className="text-gray-900 font-semibold text-sm md:text-base">#{selectedLead.id.toString().padStart(3, '0')}</p>
               </div>
               
-              <div className={`p-3 rounded-lg border-2 ${
+              <div className={`p-2 md:p-3 rounded-lg border-2 ${
                 highlightedField === 'name' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'
               }`}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
-                <p className="text-gray-900 font-semibold">{selectedLead.name}</p>
+                <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1">Nome</label>
+                <p className="text-gray-900 font-semibold text-sm md:text-base">{selectedLead.name}</p>
               </div>
               
-              <div className={`p-3 rounded-lg border-2 ${
+              <div className={`p-2 md:p-3 rounded-lg border-2 ${
                 highlightedField === 'phone' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'
               }`}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                <p className="text-gray-900 font-semibold">{selectedLead.phone}</p>
+                <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                <p className="text-gray-900 font-semibold text-sm md:text-base">{selectedLead.phone}</p>
               </div>
               
-              <div className={`p-3 rounded-lg border-2 ${
+              <div className={`p-2 md:p-3 rounded-lg border-2 ${
                 highlightedField === 'resumo' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'
               }`}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Resumo</label>
-                <p className="text-gray-900 font-medium">{selectedLead.resumo}</p>
+                <label className="block text-xs md:text-sm font-medium text-gray-700 mb-1">Resumo</label>
+                <p className="text-gray-900 font-medium text-sm md:text-base">{selectedLead.resumo}</p>
               </div>
               
               <div className={`p-3 rounded-lg border-2 ${

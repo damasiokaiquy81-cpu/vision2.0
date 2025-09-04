@@ -71,9 +71,7 @@ export const DashboardLayout: React.FC = () => {
            onSectionChange={setCurrentSection}
            currentSection={currentSection}
          />
-         <div className={`flex-1 transition-all duration-300 ${
-           currentSection === 'chat' ? 'ml-64' : 'ml-64'
-         } md:ml-64`}>
+         <div className="flex-1 transition-all duration-300 ml-16 md:ml-64">
            {renderMainContent()}
          </div>
        </div>
