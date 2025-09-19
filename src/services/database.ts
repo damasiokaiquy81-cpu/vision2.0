@@ -1,65 +1,41 @@
-// Database service for connecting to PostgreSQL via API
+// Database service for connecting to new CRM webhook
 
-// Directus API configuration interface
-interface DirectusConfig {
-  apiUrl: string;
-  token: string;
+// CRM Analysis data structure
+interface CRMAnalysisData {
+  Resumo?: string;
+  time_type?: string;
+  session_id?: string;
+  EtapadoLead?: string;
+  InsightdaIA?: string;
+  date_of_analysis?: string;
+  Objecoesmaiscomuns?: string;
+  [key: string]: any; // Para campos adicionais
 }
 
-// All analysis JSON structure
-interface AllAnalysisData {
-  'U-Id': string;
-  'S-Id': string;
-  'DT-Analysis': string;
-  'Name': string;
-  'Phone': string;
-  'Resumo': string;
-  'Satisfacao': string;
-  'Reclamacao': string;
-  'Duracao': string;
-  'Tema': string;
-  'Busca': string;
-  'Keywords': string;
-}
-
-// Directus data analysis record interface
-interface DirectusDataAnalysisRecord {
+// CRM record from webhook
+interface CRMRecord {
   id: number;
-  time_type: 'daily' | 'weekly' | 'month' | 'year';
-  all_analysis: string; // JSON string
-  'Date of Analysis'?: string;
-  filtro?: string;
-  created_at?: string;
-  updated_at?: string;
+  contacts: any;
+  daily_analysis_ai: CRMAnalysisData | null;
+  weekly_analysis_ai: CRMAnalysisData | null;
+  monthly_analysis_ai: CRMAnalysisData | null;
+  yearly_analysis_ai: CRMAnalysisData | null;
+  date_of_analysis: string;
 }
 
 // Processed data analysis record for display
 interface DataAnalysisRecord {
   id: number;
-  name: string;
-  phone: string;
-  dtAnalysis: string;
+  contact_id: number;
+  date_of_analysis: string;
   resumo: string;
-  satisfacao: string;
-  reclamacao: string;
-  duracao: string;
-  tema: string;
-  busca: string;
-  keywords: string;
-  filtro?: string;
-  isViewReference?: boolean;
-  apontamentos?: {
-    clientesInsatisfeitos: string;
-    clientesSatisfeitos: string;
-    motivosReclamacoes: string;
-  };
-  user_id?: number;
-  session_id?: string;
-  date_of_analysis?: string;
-  time_type?: string;
-  all_analyzes?: string;
-  created_at?: string;
-  updated_at?: string;
+  etapa_lead: string;
+  insight_ia: string;
+  objecoes_comuns: string;
+  session_id: string;
+  time_type: string;
+  // Campos expandidos para visualização completa
+  full_data?: CRMAnalysisData;
 }
 
 interface ApiResponse<T> {
@@ -69,87 +45,133 @@ interface ApiResponse<T> {
 }
 
 class DatabaseService {
-  private apiUrl: string;
+  private webhookUrl: string;
 
   constructor() {
-    this.apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    this.webhookUrl = 'https://webhook-flows.intelectai.com.br/webhook/vision-dados-crm';
   }
 
-  // Parse all_analysis JSON string to extract fields
-  private parseAllAnalysis(allAnalysisJson: string): Partial<AllAnalysisData> {
+  // Process CRM record based on analysis type
+  private processCRMRecord(record: CRMRecord, analysisType: 'daily' | 'weekly' | 'monthly' | 'yearly'): DataAnalysisRecord | null {
+    let analysisData: CRMAnalysisData | null = null;
+    
+    switch (analysisType) {
+      case 'daily':
+        analysisData = record.daily_analysis_ai;
+        break;
+      case 'weekly':
+        analysisData = record.weekly_analysis_ai;
+        break;
+      case 'monthly':
+        analysisData = record.monthly_analysis_ai;
+        break;
+      case 'yearly':
+        analysisData = record.yearly_analysis_ai;
+        break;
+    }
+
+    // Se não há dados para este tipo de análise, retorna null
+    if (!analysisData) {
+      return null;
+    }
+
+    return {
+      id: record.id,
+      contact_id: record.id, // Usando o ID do registro como contact_id
+      date_of_analysis: record.date_of_analysis,
+      resumo: this.truncateText(analysisData.Resumo || 'N/A', 50),
+      etapa_lead: this.truncateText(analysisData.EtapadoLead || 'N/A', 40),
+      insight_ia: this.truncateText(analysisData.InsightdaIA || 'N/A', 50),
+      objecoes_comuns: this.truncateText(analysisData.Objecoesmaiscomuns || 'N/A', 30),
+      session_id: analysisData.session_id || 'N/A',
+      time_type: analysisData.time_type || analysisType,
+      full_data: analysisData // Dados completos para expansão
+    };
+  }
+
+  // Truncate text for preview
+  private truncateText(text: string, maxLength: number): string {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  }
+
+  // Format date for display
+  private formatDate(dateString: string): string {
     try {
-      return JSON.parse(allAnalysisJson) as AllAnalysisData;
-    } catch (error) {
-      console.error('Error parsing all_analysis JSON:', error);
-      return {};
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch {
+      return 'Data inválida';
     }
   }
 
-  // Convert time_type to period mapping
-  private mapTimeToPeriod(period: 'individual' | 'weekly' | 'monthly' | 'yearly'): string {
-    const mapping = {
-      'individual': 'daily',
-      'weekly': 'weekly', 
-      'monthly': 'month',
-      'yearly': 'year'
-    };
-    return mapping[period];
-  }
-
-  // Process Directus record to DataAnalysisRecord
-  private processDirectusRecord(record: DirectusDataAnalysisRecord): DataAnalysisRecord {
-    const analysisData = this.parseAllAnalysis(record.all_analysis);
-    const hasFilterMessage = record.filtro && record.filtro.includes('Os dados da semana se mantiveram os mesmos do atendimento realizado em');
-    
-    return {
-      id: record.id,
-      name: analysisData['Name'] || `Análise ${record.id}`,
-      phone: analysisData['Phone'] !== 'null' ? analysisData['Phone'] : undefined,
-      dtAnalysis: record['Date of Analysis'] || analysisData['DT-Analysis'],
-      resumo: hasFilterMessage ? record.filtro : (analysisData['Resumo'] || undefined),
-      satisfacao: hasFilterMessage ? 'Indefinido' : (analysisData['Satisfacao'] || undefined),
-      reclamacao: hasFilterMessage ? 'Indefinido' : (analysisData['Reclamacao'] || undefined),
-      duracao: hasFilterMessage ? 'Indefinido' : (analysisData['Duracao'] || undefined),
-      tema: hasFilterMessage ? 'Indefinido' : (analysisData['Tema'] || undefined),
-      busca: hasFilterMessage ? 'Indefinido' : (analysisData['Busca'] || undefined),
-      keywords: hasFilterMessage ? 'Indefinido' : (analysisData['Keywords'] || undefined),
-      filtro: record.filtro,
-      user_id: analysisData['U-Id'] ? parseInt(analysisData['U-Id']) : undefined,
-      session_id: analysisData['S-Id'],
-      date_of_analysis: analysisData['DT-Analysis'],
-      created_at: record.created_at,
-      updated_at: record.updated_at
-    };
-  }
-
-  // Get data analysis records by period from Directus API
+  // Get data analysis records by period from new webhook
   async getDataAnalysis(period: 'individual' | 'weekly' | 'monthly' | 'yearly'): Promise<DataAnalysisRecord[]> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/directus/data-analysis?period=${period}`);
+      const response = await fetch(this.webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'get_crm_data',
+          period: period
+        })
+      });
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      const result: ApiResponse<DataAnalysisRecord[]> = await response.json();
+      const data: CRMRecord[] = await response.json();
       
-      if (!result.success) {
-        throw new Error(result.error || 'Failed to fetch data');
+      if (!Array.isArray(data)) {
+        throw new Error('Invalid response format');
       }
+
+      // Mapear period para analysis type
+      const analysisTypeMap = {
+        'individual': 'daily' as const,
+        'weekly': 'weekly' as const,
+        'monthly': 'monthly' as const,
+        'yearly': 'yearly' as const
+      };
+
+      const analysisType = analysisTypeMap[period];
       
-      return result.data || [];
+      // Processar registros e filtrar apenas os que têm dados para o tipo solicitado
+      const processedRecords = data
+        .map(record => this.processCRMRecord(record, analysisType))
+        .filter((record): record is DataAnalysisRecord => record !== null)
+        .map(record => ({
+          ...record,
+          date_of_analysis: this.formatDate(record.date_of_analysis)
+        }));
+      
+      return processedRecords;
     } catch (error) {
-      console.error('Error fetching data analysis:', error);
+      console.error('Error fetching CRM data:', error);
       throw error;
     }
   }
 
-  // Test Directus API connection
+  // Test webhook connection
   async testConnection(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/directus/health`);
-      const result = await response.json();
-      return result.success === true;
+      const response = await fetch(this.webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'test_connection'
+        })
+      });
+      return response.ok;
     } catch (error) {
       console.error('Connection test failed:', error);
       return false;
